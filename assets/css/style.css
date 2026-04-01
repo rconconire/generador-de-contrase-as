@@ -341,8 +341,8 @@ input[type=range]::-webkit-slider-thumb:hover {
 /* 6. Botón Generar */
 .generate-btn {
     width: 100%;
-    background-color: var(--clr-accent);
-    color: limegreen;
+    background-color: limegreen;
+    color: var(--clr-bg);
     border: none;
     padding: 1.8rem;
     font-size: 1.6rem;
@@ -360,7 +360,7 @@ input[type=range]::-webkit-slider-thumb:hover {
 }
 
 .generate-btn:hover {
-    background-color: var(--clr-accent-hover);
+    background-color: #228b22;
 }
 .generate-btn:active {
     transform: translateY(2px);
