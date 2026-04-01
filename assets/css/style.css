@@ -342,7 +342,7 @@ input[type=range]::-webkit-slider-thumb:hover {
 .generate-btn {
     width: 100%;
     background-color: var(--clr-accent);
-    color: var(--clr-bg);
+    color: limegreen;
     border: none;
     padding: 1.8rem;
     font-size: 1.6rem;
