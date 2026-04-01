@@ -19,7 +19,13 @@ const strengthBars = [
     document.getElementById('bar-1'),
     document.getElementById('bar-2'),
     document.getElementById('bar-3'),
-    document.getElementById('bar-4')
+    document.getElementById('bar-4'),
+    document.getElementById('bar-5'),
+    document.getElementById('bar-6'),
+    document.getElementById('bar-7'),
+    document.getElementById('bar-8'),
+    document.getElementById('bar-9'),
+    document.getElementById('bar-10')
 ];
 const toastContainer = document.getElementById('toast-container');
 
@@ -158,27 +164,31 @@ function showToast(message) {
 }
 
 
-// 7. Lógica de Fortaleza de la Contraseña
+// 7. Lógica de Fortaleza de la Contraseña (Escala de 1 a 10)
 function calculateStrength(length, typesCount) {
     let score = 0;
 
-    if (length < 8) {
-        score = 1; // Demasiado corta = muy débil
-    } else if (typesCount === 1) {
-        score = 1; // Un solo tipo de caracteres = muy débil
-    } else if (length < 10 && typesCount <= 2) {
-        score = 2; // Débil
-    } else if (length >= 10 && typesCount === 2) {
-        score = 2; // Débil
-    } else if (length >= 8 && length < 12 && typesCount >= 3) {
-        score = 3; // Media
-    } else if (length >= 12 && typesCount >= 3) {
-        score = 4; // Fuerte
-    } else {
-        // Fallback genérico
-        if (length >= 14) score = 3;
-        else score = 2;
-    }
+    // Fórmula base
+    if (typesCount > 0) score += typesCount;
+
+    // Bono por longitud
+    if (length >= 8) score += 1;
+    if (length >= 10) score += 1;
+    if (length >= 12) score += 1;
+    if (length >= 14) score += 1;
+    if (length >= 16) score += 1;
+    if (length >= 20) score += 1;
+
+    // Penalizaciones o Tapas máximas de seguridad
+    // - Si solo usa 1 tipo de carácter (ej. solo números), no puede ser más de nivel 2.
+    if (typesCount === 1) score = Math.min(score, 2);
+    // - Si usa 2 tipos, máximo nivel 4.
+    if (typesCount === 2) score = Math.min(score, 4);
+    // - Si usa 3 tipos, máximo nivel 7.
+    if (typesCount === 3) score = Math.min(score, 7);
+
+    // Asegurarse de no exceder 10
+    score = Math.min(score, 10);
     
     updateStrengthIndicator(score);
 }
@@ -192,21 +202,26 @@ function updateStrengthIndicator(score) {
 
     if (score === 0) return;
 
-    if (score === 1) {
-        strengthText.textContent = 'Muy Débil';
-        strengthBars[0].classList.add('very-weak');
-    } else if (score === 2) {
-        strengthText.textContent = 'Débil';
-        strengthBars[0].classList.add('weak');
-        strengthBars[1].classList.add('weak');
-    } else if (score === 3) {
-        strengthText.textContent = 'Media';
-        strengthBars[0].classList.add('medium');
-        strengthBars[1].classList.add('medium');
-        strengthBars[2].classList.add('medium');
-    } else if (score >= 4) {
-        strengthText.textContent = 'Fuerte';
-        strengthBars.forEach(bar => bar.classList.add('strong'));
+    let text = '';
+    let cssClass = '';
+
+    if (score <= 2) {
+        text = 'Muy Débil';
+        cssClass = 'very-weak';
+    } else if (score <= 4) {
+        text = 'Débil';
+        cssClass = 'weak';
+    } else if (score <= 7) {
+        text = 'Media';
+        cssClass = 'medium';
+    } else {
+        text = 'Fuerte';
+        cssClass = 'strong';
+    }
+
+    strengthText.textContent = text;
+    for (let i = 0; i < score; i++) {
+        strengthBars[i].classList.add(cssClass);
     }
 }
 
